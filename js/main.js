@@ -81,14 +81,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const phone   = document.getElementById("bPhone")?.value.trim();
       const service = document.getElementById("bService")?.value;
       const date    = document.getElementById("bDate")?.value;
-      const time    = document.getElementById("bTime")?.value;
       const message = document.getElementById("bNote")?.value.trim();
 
-      // Debug - see what's being captured
-      console.log("Booking form:", { name, phone, service, date, time, message });
-
-      if (!name || !phone || !service || !date || !time) {
-        alert("Please fill in all required fields (Name, Phone, Service, Date, and Time).");
+      // Basic validation
+      if (!name || !phone || !service || !date) {
+        alert("Please fill in all required fields.");
         return;
       }
 
@@ -98,8 +95,9 @@ document.addEventListener("DOMContentLoaded", () => {
       showMsg("bookingError", false);
 
       try {
+        // Dynamic import so page loads even without Firebase configured
         const { saveBooking } = await import("./firebase.js");
-        await saveBooking({ name, phone, service, date, time, message });
+        await saveBooking({ name, phone, service, date, message });
 
         showMsg("bookingSuccess", true);
         bookingForm.reset();
@@ -123,9 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const service = document.getElementById("rService")?.value;
       const stars   = parseInt(document.getElementById("rStars")?.value || "0");
 
-      // Debug - see what's being captured
-      console.log("Review form:", { name, review, service, stars });
-
       if (!name || !review || stars < 1) {
         alert("Please fill in your name, review, and star rating.");
         return;
@@ -140,14 +135,13 @@ document.addEventListener("DOMContentLoaded", () => {
         const { saveReview } = await import("./firebase.js");
         await saveReview({ name, review, service, stars });
 
+        // Optimistically add to grid (pending approval note)
+        addReviewCard({ name, review, stars, pending: true });
+
         showMsg("reviewSuccess", true);
         reviewForm.reset();
         selectedStars = 0;
         document.querySelectorAll("#starPicker button").forEach(b => b.classList.remove("lit"));
-        starsInput.value = 0;
-        
-        // Reload reviews to show the new one (if approved immediately)
-        setTimeout(() => loadFirebaseReviews(), 1000);
       } catch (err) {
         console.error("Review error:", err);
         showMsg("reviewError", true);
@@ -155,22 +149,6 @@ document.addEventListener("DOMContentLoaded", () => {
         setLoading(btn, false);
       }
     });
-  }
-
-  // ── Load Firebase reviews on page load ────────────────────
-  async function loadFirebaseReviews() {
-    try {
-      const { loadReviews } = await import("./firebase.js");
-      const reviews = await loadReviews();
-      const grid = document.getElementById("reviewsGrid");
-      if (grid && reviews.length > 0) {
-        // Clear seeded reviews first (optional)
-        // grid.innerHTML = "";
-        reviews.forEach(r => addReviewCard({ name: r.name, review: r.review, stars: r.stars }));
-      }
-    } catch (err) {
-      console.warn("Could not load reviews:", err);
-    }
   }
 
   // ── Add review card to grid ───────────────────────────────
@@ -185,12 +163,21 @@ document.addEventListener("DOMContentLoaded", () => {
     card.innerHTML = `
       <div class="review-stars">${starStr}</div>
       <p class="review-text">"${escapeHtml(review)}"</p>
-      <div class="reviewer">${escapeHtml(name)}${pending ? ' <span style="font-size:11px;color:#888;">(pending approval)</span>' : ''}</div>
+      <div class="reviewer">${escapeHtml(name)}${pending ? ' <span style="font-size:11px;color:var(--text-muted);">(pending approval)</span>' : ''}</div>
     `;
     grid.prepend(card);
   }
 
-  // Load reviews on page load
+  // ── Load Firebase reviews on page load ────────────────────
+  async function loadFirebaseReviews() {
+    try {
+      const { loadReviews } = await import("./firebase.js");
+      const reviews = await loadReviews();
+      reviews.forEach(r => addReviewCard({ name: r.name, review: r.review, stars: r.stars }));
+    } catch {
+      // Silent — seeded reviews already show
+    }
+  }
   loadFirebaseReviews();
 
   // ── Smooth scroll for all anchor links ───────────────────
@@ -206,7 +193,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ── Utility: escape HTML for user content ─────────────────
   function escapeHtml(str) {
-    if (!str) return "";
     return str
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
