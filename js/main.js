@@ -73,43 +73,43 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ── Booking form ──────────────────────────────────────────
   const bookingForm = document.getElementById("bookingForm");
-  if (bookingForm) {
-    bookingForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+if (bookingForm) {
+  bookingForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      const name    = document.getElementById("bName")?.value.trim();
-      const phone   = document.getElementById("bPhone")?.value.trim();
-      const service = document.getElementById("bService")?.value;
-      const date    = document.getElementById("bDate")?.value;
-      const message = document.getElementById("bNote")?.value.trim();
+    const name    = document.getElementById("bName")?.value.trim();
+    const phone   = document.getElementById("bPhone")?.value.trim();
+    const service = document.getElementById("bService")?.value;
+    const date    = document.getElementById("bDate")?.value;
+    const time    = document.getElementById("bTime")?.value;  // ← ADD THIS LINE
+    const message = document.getElementById("bNote")?.value.trim();
 
-      // Basic validation
-      if (!name || !phone || !service || !date) {
-        alert("Please fill in all required fields.");
-        return;
-      }
+    // Basic validation - ADD time to validation
+    if (!name || !phone || !service || !date || !time) {  // ← ADD !time
+      alert("Please fill in all required fields.");
+      return;
+    }
 
-      const btn = document.getElementById("bookingBtn");
-      setLoading(btn, true);
-      showMsg("bookingSuccess", false);
-      showMsg("bookingError", false);
+    const btn = document.getElementById("bookingBtn");
+    setLoading(btn, true);
+    showMsg("bookingSuccess", false);
+    showMsg("bookingError", false);
 
-      try {
-        // Dynamic import so page loads even without Firebase configured
-        const { saveBooking } = await import("./firebase.js");
-        await saveBooking({ name, phone, service, date, message });
+    try {
+      // Dynamic import so page loads even without Firebase configured
+      const { saveBooking } = await import("./firebase.js");
+      await saveBooking({ name, phone, service, date, time, message });  // ← ADD time here
 
-        showMsg("bookingSuccess", true);
-        bookingForm.reset();
-      } catch (err) {
-        console.error("Booking error:", err);
-        showMsg("bookingError", true);
-      } finally {
-        setLoading(btn, false);
-      }
-    });
-  }
-
+      showMsg("bookingSuccess", true);
+      bookingForm.reset();
+    } catch (err) {
+      console.error("Booking error:", err);
+      showMsg("bookingError", true);
+    } finally {
+      setLoading(btn, false);
+    }
+  });
+}
   // ── Review form ───────────────────────────────────────────
   const reviewForm = document.getElementById("reviewForm");
   if (reviewForm) {
