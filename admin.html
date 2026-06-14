@@ -365,7 +365,7 @@
        tbody.innerHTML = bookings.map(apt => `
   <tr>
     <td>${apt.preferredDate || 'N/A'}</td>
-    <td>${apt.time || 'Not specified'}</td>  <!-- ADD THIS LINE -->
+    <td>${apt.preferredTime || 'Not specified'}</td>  <!-- ADD THIS LINE -->
     <td>${escapeHtml(apt.name || '')}</td>
     <td>${escapeHtml(apt.phone || '')}</td>
     <td>${escapeHtml(apt.service || '')}</td>
