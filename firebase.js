@@ -11,6 +11,7 @@
 // firebase.js - COMPLETE VERSION with all admin functions
 // firebase.js - COMPLETE FILE with everything inside
 // firebase.js - COMPLETE WORKING VERSION
+// firebase.js - COMPLETE FILE with everything inside
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import {
   getFirestore,
@@ -26,7 +27,7 @@ import {
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-// Your Firebase config
+// YOUR FIREBASE CONFIG - directly in this file
 const firebaseConfig = {
   apiKey: "AIzaSyD7rlKLVa823PXFQRUx0X8fXUrQxuBw7Eg",
   authDomain: "chloes-hair-studio.firebaseapp.com",
@@ -51,18 +52,11 @@ try {
 
 // ── Save a booking ────────────────────────────────────
 export async function saveBooking(data) {
-  console.log("Saving booking:", data);
   if (!firebaseReady) {
-    console.warn("Firebase not ready, simulating save");
     return new Promise(resolve => setTimeout(resolve, 1000));
   }
   return await addDoc(collection(db, "bookings"), {
-    name: data.name,
-    phone: data.phone,
-    service: data.service,
-    preferredDate: data.date,
-    preferredTime: data.time || "Not specified",
-    message: data.message || "",
+    ...data,
     createdAt: serverTimestamp(),
     status: "pending"
   });
@@ -70,18 +64,13 @@ export async function saveBooking(data) {
 
 // ── Save a review ─────────────────────────────────────
 export async function saveReview(data) {
-  console.log("Saving review:", data);
   if (!firebaseReady) {
-    console.warn("Firebase not ready, simulating save");
     return new Promise(resolve => setTimeout(resolve, 1000));
   }
   return await addDoc(collection(db, "reviews"), {
-    name: data.name,
-    review: data.review,        // Make sure this matches
-    service: data.service || "",
-    stars: data.stars,
-    approved: false,
-    createdAt: serverTimestamp()
+    ...data,
+    createdAt: serverTimestamp(),
+    approved: false
   });
 }
 
@@ -94,9 +83,9 @@ export async function loadReviews() {
       orderBy("createdAt", "desc")
     );
     const snapshot = await getDocs(q);
-    const allReviews = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    // Only return approved reviews for the website
-    return allReviews.filter(r => r.approved === true);
+    return snapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .filter(r => r.approved === true);
   } catch (err) {
     console.warn("Could not load reviews:", err.message);
     return [];
