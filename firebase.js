@@ -54,7 +54,12 @@ export async function saveBooking(data) {
     return new Promise(resolve => setTimeout(resolve, 1000));
   }
   return await addDoc(collection(db, "bookings"), {
-    ...data,
+    name: data.name,
+    phone: data.phone,
+    service: data.service,
+    preferredDate: data.date,     // Make sure this matches
+    preferredTime: data.time,     // ← ADD THIS LINE
+    message: data.message,
     createdAt: serverTimestamp(),
     status: "pending"
   });
