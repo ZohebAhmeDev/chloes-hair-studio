@@ -73,43 +73,45 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ── Booking form ──────────────────────────────────────────
   const bookingForm = document.getElementById("bookingForm");
-if (bookingForm) {
-  bookingForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+  if (bookingForm) {
+    bookingForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    const name    = document.getElementById("bName")?.value.trim();
-    const phone   = document.getElementById("bPhone")?.value.trim();
-    const service = document.getElementById("bService")?.value;
-    const date    = document.getElementById("bDate")?.value;
-    const time    = document.getElementById("bTime")?.value;  // ← ADD THIS LINE
-    const message = document.getElementById("bNote")?.value.trim();
+      const name    = document.getElementById("bName")?.value.trim();
+      const phone   = document.getElementById("bPhone")?.value.trim();
+      const service = document.getElementById("bService")?.value;
+      const date    = document.getElementById("bDate")?.value;
+      const time    = document.getElementById("bTime")?.value;
+      const message = document.getElementById("bNote")?.value.trim();
 
-    // Basic validation - ADD time to validation
-    if (!name || !phone || !service || !date || !time) {  // ← ADD !time
-      alert("Please fill in all required fields.");
-      return;
-    }
+      // Debug - see what's being captured
+      console.log("Booking form:", { name, phone, service, date, time, message });
 
-    const btn = document.getElementById("bookingBtn");
-    setLoading(btn, true);
-    showMsg("bookingSuccess", false);
-    showMsg("bookingError", false);
+      if (!name || !phone || !service || !date || !time) {
+        alert("Please fill in all required fields (Name, Phone, Service, Date, and Time).");
+        return;
+      }
 
-    try {
-      // Dynamic import so page loads even without Firebase configured
-      const { saveBooking } = await import("./firebase.js");
-      await saveBooking({ name, phone, service, date, time, message });  // ← ADD time here
+      const btn = document.getElementById("bookingBtn");
+      setLoading(btn, true);
+      showMsg("bookingSuccess", false);
+      showMsg("bookingError", false);
 
-      showMsg("bookingSuccess", true);
-      bookingForm.reset();
-    } catch (err) {
-      console.error("Booking error:", err);
-      showMsg("bookingError", true);
-    } finally {
-      setLoading(btn, false);
-    }
-  });
-}
+      try {
+        const { saveBooking } = await import("./firebase.js");
+        await saveBooking({ name, phone, service, date, time, message });
+
+        showMsg("bookingSuccess", true);
+        bookingForm.reset();
+      } catch (err) {
+        console.error("Booking error:", err);
+        showMsg("bookingError", true);
+      } finally {
+        setLoading(btn, false);
+      }
+    });
+  }
+
   // ── Review form ───────────────────────────────────────────
   const reviewForm = document.getElementById("reviewForm");
   if (reviewForm) {
@@ -120,6 +122,9 @@ if (bookingForm) {
       const review  = document.getElementById("rText")?.value.trim();
       const service = document.getElementById("rService")?.value;
       const stars   = parseInt(document.getElementById("rStars")?.value || "0");
+
+      // Debug - see what's being captured
+      console.log("Review form:", { name, review, service, stars });
 
       if (!name || !review || stars < 1) {
         alert("Please fill in your name, review, and star rating.");
@@ -135,13 +140,14 @@ if (bookingForm) {
         const { saveReview } = await import("./firebase.js");
         await saveReview({ name, review, service, stars });
 
-        // Optimistically add to grid (pending approval note)
-        addReviewCard({ name, review, stars, pending: true });
-
         showMsg("reviewSuccess", true);
         reviewForm.reset();
         selectedStars = 0;
         document.querySelectorAll("#starPicker button").forEach(b => b.classList.remove("lit"));
+        starsInput.value = 0;
+        
+        // Reload reviews to show the new one (if approved immediately)
+        setTimeout(() => loadFirebaseReviews(), 1000);
       } catch (err) {
         console.error("Review error:", err);
         showMsg("reviewError", true);
@@ -149,6 +155,22 @@ if (bookingForm) {
         setLoading(btn, false);
       }
     });
+  }
+
+  // ── Load Firebase reviews on page load ────────────────────
+  async function loadFirebaseReviews() {
+    try {
+      const { loadReviews } = await import("./firebase.js");
+      const reviews = await loadReviews();
+      const grid = document.getElementById("reviewsGrid");
+      if (grid && reviews.length > 0) {
+        // Clear seeded reviews first (optional)
+        // grid.innerHTML = "";
+        reviews.forEach(r => addReviewCard({ name: r.name, review: r.review, stars: r.stars }));
+      }
+    } catch (err) {
+      console.warn("Could not load reviews:", err);
+    }
   }
 
   // ── Add review card to grid ───────────────────────────────
@@ -163,21 +185,12 @@ if (bookingForm) {
     card.innerHTML = `
       <div class="review-stars">${starStr}</div>
       <p class="review-text">"${escapeHtml(review)}"</p>
-      <div class="reviewer">${escapeHtml(name)}${pending ? ' <span style="font-size:11px;color:var(--text-muted);">(pending approval)</span>' : ''}</div>
+      <div class="reviewer">${escapeHtml(name)}${pending ? ' <span style="font-size:11px;color:#888;">(pending approval)</span>' : ''}</div>
     `;
     grid.prepend(card);
   }
 
-  // ── Load Firebase reviews on page load ────────────────────
-  async function loadFirebaseReviews() {
-    try {
-      const { loadReviews } = await import("./firebase.js");
-      const reviews = await loadReviews();
-      reviews.forEach(r => addReviewCard({ name: r.name, review: r.review, stars: r.stars }));
-    } catch {
-      // Silent — seeded reviews already show
-    }
-  }
+  // Load reviews on page load
   loadFirebaseReviews();
 
   // ── Smooth scroll for all anchor links ───────────────────
@@ -193,6 +206,7 @@ if (bookingForm) {
 
   // ── Utility: escape HTML for user content ─────────────────
   function escapeHtml(str) {
+    if (!str) return "";
     return str
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
