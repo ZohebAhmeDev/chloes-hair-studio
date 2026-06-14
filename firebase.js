@@ -9,6 +9,7 @@
 
 // firebase.js
 // firebase.js - COMPLETE VERSION with all admin functions
+// firebase.js - COMPLETE FILE with everything inside
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import {
   getFirestore,
@@ -18,13 +19,13 @@ import {
   query,
   orderBy,
   where,
-  updateDoc,      // ← IMPORTANT for admin
-  deleteDoc,      // ← IMPORTANT for admin
-  doc,            // ← IMPORTANT for admin
+  updateDoc,
+  deleteDoc,
+  doc,
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-// Your Firebase config
+// YOUR FIREBASE CONFIG - directly in this file
 const firebaseConfig = {
   apiKey: "AIzaSyD7rlKLVa823PXFQRUx0X8fXUrQxuBw7Eg",
   authDomain: "chloes-hair-studio.firebaseapp.com",
@@ -71,7 +72,7 @@ export async function saveReview(data) {
   });
 }
 
-// ── Load approved reviews ────────────────────────────
+// ── Load approved reviews for website ─────────────────
 export async function loadReviews() {
   if (!firebaseReady) return [];
   try {
@@ -82,24 +83,35 @@ export async function loadReviews() {
     const snapshot = await getDocs(q);
     return snapshot.docs
       .map(doc => ({ id: doc.id, ...doc.data() }))
-      .filter(r => r.approved);
+      .filter(r => r.approved === true);
   } catch (err) {
     console.warn("Could not load reviews:", err.message);
     return [];
   }
 }
 
-// ── ADMIN FUNCTIONS (for admin.html) ──────────────────
+// ═══════════════════════════════════════════════════════
+// ║  ADMIN FUNCTIONS                                     ║
+// ═══════════════════════════════════════════════════════
+
 export async function loadAllBookings() {
   if (!firebaseReady) return [];
-  const q = query(collection(db, "bookings"), orderBy("createdAt", "desc"));
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  try {
+    const q = query(collection(db, "bookings"), orderBy("createdAt", "desc"));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (err) {
+    console.error("Error loading bookings:", err);
+    return [];
+  }
 }
 
 export async function updateBookingStatus(id, status) {
   if (!firebaseReady) return;
-  await updateDoc(doc(db, "bookings", id), { status, updatedAt: serverTimestamp() });
+  await updateDoc(doc(db, "bookings", id), { 
+    status: status, 
+    updatedAt: serverTimestamp() 
+  });
 }
 
 export async function deleteBooking(id) {
@@ -109,14 +121,22 @@ export async function deleteBooking(id) {
 
 export async function loadAllReviews() {
   if (!firebaseReady) return [];
-  const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  try {
+    const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  } catch (err) {
+    console.error("Error loading reviews:", err);
+    return [];
+  }
 }
 
 export async function approveReview(id) {
   if (!firebaseReady) return;
-  await updateDoc(doc(db, "reviews", id), { approved: true, approvedAt: serverTimestamp() });
+  await updateDoc(doc(db, "reviews", id), { 
+    approved: true, 
+    approvedAt: serverTimestamp() 
+  });
 }
 
 export async function deleteReview(id) {
