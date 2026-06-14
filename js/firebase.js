@@ -8,6 +8,7 @@
 // ──────────────────────────────────────────────────────────────────
 
 // firebase.js
+// firebase.js - COMPLETE VERSION with all admin functions
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
 import {
   getFirestore,
@@ -17,14 +18,22 @@ import {
   query,
   orderBy,
   where,
-  updateDoc,
-  deleteDoc,
-  doc,
+  updateDoc,      // ← IMPORTANT for admin
+  deleteDoc,      // ← IMPORTANT for admin
+  doc,            // ← IMPORTANT for admin
   serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
-// Import config from separate file
-import { firebaseConfig } from './firebase-config.js';
+// Your Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyD7rlKLVa823PXFQRUx0X8fXUrQxuBw7Eg",
+  authDomain: "chloes-hair-studio.firebaseapp.com",
+  projectId: "chloes-hair-studio",
+  storageBucket: "chloes-hair-studio.firebasestorage.app",
+  messagingSenderId: "495588109414",
+  appId: "1:495588109414:web:10815ad3d7c858388b51a7",
+  measurementId: "G-L8YK901BVP"
+};
 
 let db = null;
 let firebaseReady = false;
@@ -35,12 +44,14 @@ try {
   firebaseReady = true;
   console.log("✅ Firebase connected");
 } catch (err) {
-  console.warn("⚠️ Firebase not configured yet.", err.message);
+  console.warn("⚠️ Firebase error:", err.message);
 }
 
-// Your existing functions...
+// ── Save a booking ────────────────────────────────────
 export async function saveBooking(data) {
-  if (!firebaseReady) return new Promise(resolve => setTimeout(resolve, 1000));
+  if (!firebaseReady) {
+    return new Promise(resolve => setTimeout(resolve, 1000));
+  }
   return await addDoc(collection(db, "bookings"), {
     ...data,
     createdAt: serverTimestamp(),
@@ -48,8 +59,11 @@ export async function saveBooking(data) {
   });
 }
 
+// ── Save a review ─────────────────────────────────────
 export async function saveReview(data) {
-  if (!firebaseReady) return new Promise(resolve => setTimeout(resolve, 1000));
+  if (!firebaseReady) {
+    return new Promise(resolve => setTimeout(resolve, 1000));
+  }
   return await addDoc(collection(db, "reviews"), {
     ...data,
     createdAt: serverTimestamp(),
@@ -57,19 +71,25 @@ export async function saveReview(data) {
   });
 }
 
+// ── Load approved reviews ────────────────────────────
 export async function loadReviews() {
   if (!firebaseReady) return [];
   try {
-    const q = query(collection(db, "reviews"), orderBy("createdAt", "desc"));
+    const q = query(
+      collection(db, "reviews"),
+      orderBy("createdAt", "desc")
+    );
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return snapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .filter(r => r.approved);
   } catch (err) {
     console.warn("Could not load reviews:", err.message);
     return [];
   }
 }
 
-// NEW: Admin functions
+// ── ADMIN FUNCTIONS (for admin.html) ──────────────────
 export async function loadAllBookings() {
   if (!firebaseReady) return [];
   const q = query(collection(db, "bookings"), orderBy("createdAt", "desc"));
