@@ -5,368 +5,495 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Dashboard | Chloe's Hair Studio</title>
   <meta name="robots" content="noindex, nofollow" />
+  
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-family: 'Inter', sans-serif;
       background: #f5efe8;
+      color: #2c2418;
       padding: 20px;
     }
-    .container { max-width: 1400px; margin: 0 auto; }
     
-    /* Login */
-    .login-box {
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    
+    /* Login Panel */
+    .login-panel {
       max-width: 400px;
-      margin: 100px auto;
+      margin: 80px auto;
       background: white;
       padding: 40px;
-      border-radius: 20px;
+      border-radius: 28px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
       text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
     }
-    .login-box input {
+    
+    .login-panel h1 {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      color: #a26a3b;
+    }
+    
+    .login-panel input {
       width: 100%;
-      padding: 12px;
-      margin: 15px 0;
-      border: 1px solid #ddd;
-      border-radius: 8px;
+      padding: 14px 18px;
+      margin: 16px 0;
+      border: 1px solid #e0d0c0;
+      border-radius: 40px;
+      font-size: 1rem;
     }
-    .login-box button {
+    
+    .login-panel button {
+      width: 100%;
+      padding: 14px;
       background: #2c2418;
       color: white;
-      padding: 12px 30px;
       border: none;
-      border-radius: 8px;
+      border-radius: 40px;
+      font-size: 1rem;
+      font-weight: 600;
       cursor: pointer;
     }
-    .error { color: red; margin-top: 10px; display: none; }
+    
+    .login-panel button:hover { background: #a25b2a; }
+    .error-msg { color: #d9534f; margin-top: 12px; display: none; }
     
     /* Dashboard */
     .dashboard { display: none; }
+    
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 30px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    
+    .header h1 {
+      font-size: 1.8rem;
+      color: #2c2418;
+    }
+    
+    .logout-btn, .refresh-btn {
+      background: #dcb085;
+      color: #2c2418;
+      padding: 10px 24px;
+      border: none;
+      border-radius: 40px;
+      cursor: pointer;
+      font-weight: 500;
+      margin-left: 10px;
+    }
+    
+    .tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 32px;
       flex-wrap: wrap;
     }
-    .tab-bar {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 30px;
-      border-bottom: 2px solid #ddd;
-      padding-bottom: 10px;
-    }
-    .tab {
-      padding: 10px 20px;
-      background: none;
-      border: none;
+    
+    .tab-btn {
+      padding: 12px 28px;
+      background: white;
+      border: 1px solid #e0d0c0;
+      border-radius: 40px;
       cursor: pointer;
-      font-size: 16px;
+      font-weight: 500;
     }
-    .tab.active {
-      border-bottom: 3px solid #d99e4a;
-      color: #d99e4a;
-      font-weight: bold;
+    
+    .tab-btn.active {
+      background: #2c2418;
+      color: white;
     }
-    .stats {
+    
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    
+    .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 20px;
-      margin-bottom: 30px;
+      margin-bottom: 32px;
     }
+    
     .stat-card {
       background: white;
-      padding: 20px;
-      border-radius: 12px;
+      padding: 24px;
+      border-radius: 24px;
       text-align: center;
     }
-    .stat-number { font-size: 32px; font-weight: bold; color: #d99e4a; }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #d99e4a;
+    }
+    
+    .table-wrapper {
+      background: white;
+      border-radius: 24px;
+      overflow-x: auto;
+    }
+    
     table {
       width: 100%;
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
+      border-collapse: collapse;
     }
+    
     th, td {
-      padding: 12px;
+      padding: 16px;
       text-align: left;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid #f0e4d8;
     }
-    th { background: #faf5ef; }
-    button {
-      padding: 6px 12px;
-      margin: 2px;
+    
+    th {
+      background: #faf5ef;
+      font-weight: 600;
+    }
+    
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .status-pending { background: #fff3e0; color: #cc7b2c; }
+    .status-confirmed { background: #e0f2e9; color: #2b6e3c; }
+    
+    .action-btn {
+      padding: 6px 14px;
+      margin: 0 4px;
       border: none;
-      border-radius: 6px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    
+    .btn-approve { background: #4caf50; color: white; }
+    .btn-delete { background: #f44336; color: white; }
+    .btn-confirm { background: #2196f3; color: white; }
+    .btn-view { background: #ff9800; color: white; }
+    
+    .stars { color: #f5b042; letter-spacing: 2px; }
+    .review-text-preview { max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    
+    .modal-content {
+      background: white;
+      padding: 32px;
+      border-radius: 28px;
+      max-width: 500px;
+      width: 90%;
+    }
+    
+    .close-modal {
+      float: right;
+      background: none;
+      border: none;
+      font-size: 24px;
       cursor: pointer;
     }
-    .btn-confirm { background: #4caf50; color: white; }
-    .btn-delete { background: #f44336; color: white; }
-    .btn-approve { background: #4caf50; color: white; }
-    .btn-refresh { background: #2196f3; color: white; padding: 8px 16px; }
-    .logout-btn { background: #dcb085; color: #2c2418; padding: 8px 16px; }
-    .status-pending { background: #fff3e0; padding: 4px 8px; border-radius: 12px; font-size: 12px; }
-    .status-confirmed { background: #e0f2e9; padding: 4px 8px; border-radius: 12px; font-size: 12px; }
-    .stars { color: #f5b042; }
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
+    
     @media (max-width: 768px) {
-      th, td { font-size: 12px; padding: 8px; }
-      button { padding: 4px 8px; font-size: 11px; }
+      th, td { padding: 10px; font-size: 0.85rem; }
+      .action-btn { padding: 4px 10px; margin: 2px; }
     }
   </style>
 </head>
 <body>
-<div class="container">
-  <!-- Login Panel -->
-  <div id="loginPanel" class="login-box">
-    <h2>🔐 Admin Login</h2>
-    <p>Chloe's Hair Studio</p>
-    <input type="password" id="password" placeholder="Enter password">
-    <button onclick="login()">Login</button>
-    <div id="errorMsg" class="error"></div>
-  </div>
-
-  <!-- Dashboard -->
-  <div id="dashboard" class="dashboard">
-    <div class="header">
-      <h1>📊 Admin Dashboard</h1>
-      <div>
-        <button class="btn-refresh" onclick="refreshAll()">🔄 Refresh</button>
-        <button class="logout-btn" onclick="logout()">Logout</button>
-      </div>
+  <div class="container">
+    <!-- Login Panel -->
+    <div id="loginPanel" class="login-panel">
+      <h1>🔐 Admin Access</h1>
+      <p>Chloe's Hair Studio</p>
+      <input type="password" id="adminPassword" placeholder="Enter password" />
+      <button onclick="attemptLogin()">Login to Dashboard</button>
+      <div id="loginError" class="error-msg">Incorrect password</div>
     </div>
-
-    <div class="tab-bar">
-      <button class="tab active" onclick="showTab('appointments')">📅 Appointments</button>
-      <button class="tab" onclick="showTab('reviews')">⭐ Pending Reviews</button>
-      <button class="tab" onclick="showTab('approved')">✅ Approved Reviews</button>
-    </div>
-
-    <!-- Appointments Tab -->
-    <div id="appointmentsTab" class="tab-content active">
-      <div class="stats">
-        <div class="stat-card"><div class="stat-number" id="totalCount">0</div><div>Total Appointments</div></div>
-        <div class="stat-card"><div class="stat-number" id="pendingCount">0</div><div>Pending</div></div>
+    
+    <!-- Dashboard -->
+    <div id="dashboard" class="dashboard">
+      <div class="header">
+        <h1><i class="ti ti-crown"></i> Admin Dashboard</h1>
+        <div>
+          <button class="refresh-btn" onclick="refreshAll()">🔄 Refresh</button>
+          <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
       </div>
-      <div style="overflow-x: auto;">
-        <table id="appointmentsTable">
-          <thead><tr><th>Date</th><th>Name</th><th>Phone</th><th>Service</th><th>Status</th><th>Message</th><th>Actions</th></tr></thead>
-          <tbody id="appointmentsBody"><tr><td colspan="7">Loading...</td></tr></tbody>
-        </table>
+      
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="appointments">📅 Appointments</button>
+        <button class="tab-btn" data-tab="reviews">⭐ Pending Reviews</button>
+        <button class="tab-btn" data-tab="approved">✅ Approved Reviews</button>
       </div>
-    </div>
-
-    <!-- Pending Reviews Tab -->
-    <div id="reviewsTab" class="tab-content">
-      <div class="stats">
-        <div class="stat-card"><div class="stat-number" id="pendingReviewsCount">0</div><div>Pending Reviews</div></div>
+      
+      <div id="appointmentsTab" class="tab-content active">
+        <div class="stats-grid">
+          <div class="stat-card"><div class="stat-number" id="totalAppointments">0</div><div>Total</div></div>
+          <div class="stat-card"><div class="stat-number" id="pendingAppointments">0</div><div>Pending</div></div>
+        </div>
+        <div class="table-wrapper">
+          <table id="appointmentsTable">
+            <thead><tr><th>Date</th><th>Name</th><th>Phone</th><th>Service</th><th>Status</th><th>Message</th><th>Actions</th></tr></thead>
+            <tbody id="appointmentsList"><tr><td colspan="7" style="text-align:center">Loading...</td></tr></tbody>
+           </table>
+        </div>
       </div>
-      <div style="overflow-x: auto;">
-        <table>
-          <thead><tr><th>Date</th><th>Name</th><th>Service</th><th>Rating</th><th>Review</th><th>Actions</th></tr></thead>
-          <tbody id="pendingReviewsBody"><tr><td colspan="6">Loading...</td></tr></tbody>
-        </table>
+      
+      <div id="reviewsTab" class="tab-content">
+        <div class="stat-card"><div class="stat-number" id="pendingReviewsCount">0</div><div>Pending Approval</div></div>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Date</th><th>Name</th><th>Service</th><th>Rating</th><th>Review</th><th>Actions</th></tr></thead>
+            <tbody id="pendingReviewsList"><tr><td colspan="6" style="text-align:center">Loading...</td></tr></tbody>
+           </table>
+        </div>
       </div>
-    </div>
-
-    <!-- Approved Reviews Tab -->
-    <div id="approvedTab" class="tab-content">
-      <div style="overflow-x: auto;">
-        <table>
-          <thead><tr><th>Date</th><th>Name</th><th>Service</th><th>Rating</th><th>Review</th><th>Actions</th></tr></thead>
-          <tbody id="approvedReviewsBody"><tr><td colspan="6">Loading...</td></tr></tbody>
-        </table>
+      
+      <div id="approvedTab" class="tab-content">
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Date</th><th>Name</th><th>Service</th><th>Rating</th><th>Review</th><th>Actions</th></tr></thead>
+            <tbody id="approvedReviewsList"><tr><td colspan="6" style="text-align:center">Loading...</td></tr></tbody>
+           </table>
+        </div>
       </div>
     </div>
   </div>
-</div>
+  
+  <div id="reviewModal" class="modal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal()">&times;</button>
+      <div id="modalBody"></div>
+    </div>
+  </div>
 
-<script type="module">
-  import { 
-    loadAllBookings, 
-    updateBookingStatus, 
-    deleteBooking, 
-    loadAllReviews, 
-    approveReview, 
-    deleteReview 
-  } from './firebase.js';
-
-  const PASSWORD = "admin123";  // Change this to your password
-
-  // Make functions global
-  window.login = function() {
-    const pwd = document.getElementById('password').value;
-    if (pwd === PASSWORD) {
-      sessionStorage.setItem('adminLoggedIn', 'true');
+  <script type="module">
+    // Import Firebase functions
+    import { 
+      loadAllBookings, 
+      updateBookingStatus, 
+      deleteBooking, 
+      loadAllReviews, 
+      approveReview, 
+      deleteReview 
+    } from './firebase.js';
+    
+    // Simple password - CHANGE THIS to whatever you want
+    const ADMIN_PASSWORD = "admin123";
+    
+    // Make functions available globally
+    window.attemptLogin = function() {
+      const password = document.getElementById('adminPassword').value;
+      if (password === ADMIN_PASSWORD) {
+        sessionStorage.setItem('adminLoggedIn', 'true');
+        document.getElementById('loginPanel').style.display = 'none';
+        document.getElementById('dashboard').style.display = 'block';
+        refreshAll();
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+      }
+    };
+    
+    window.logout = function() {
+      sessionStorage.removeItem('adminLoggedIn');
+      document.getElementById('loginPanel').style.display = 'block';
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('adminPassword').value = '';
+    };
+    
+    window.refreshAll = async function() {
+      console.log("Refreshing data...");
+      await loadAppointments();
+      await loadReviewsData();
+    };
+    
+    // Check if already logged in
+    if (sessionStorage.getItem('adminLoggedIn') === 'true') {
       document.getElementById('loginPanel').style.display = 'none';
       document.getElementById('dashboard').style.display = 'block';
       refreshAll();
-    } else {
-      document.getElementById('errorMsg').style.display = 'block';
-      document.getElementById('errorMsg').textContent = 'Incorrect password';
     }
-  };
-
-  window.logout = function() {
-    sessionStorage.removeItem('adminLoggedIn');
-    document.getElementById('loginPanel').style.display = 'block';
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('password').value = '';
-  };
-
-  window.showTab = function(tabName) {
-    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    if (tabName === 'appointments') {
-      document.querySelector('[data-tab="appointments"]')?.classList.add('active');
-      document.getElementById('appointmentsTab').classList.add('active');
-    } else if (tabName === 'reviews') {
-      document.getElementById('reviewsTab').classList.add('active');
-    } else if (tabName === 'approved') {
-      document.getElementById('approvedTab').classList.add('active');
-    }
-    // Update active tab styling
-    document.querySelectorAll('.tab').forEach(tab => {
-      if ((tabName === 'appointments' && tab.textContent.includes('Appointments')) ||
-          (tabName === 'reviews' && tab.textContent.includes('Pending')) ||
-          (tabName === 'approved' && tab.textContent.includes('Approved'))) {
-        tab.classList.add('active');
-      }
+    
+    // Tab switching
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tabName = btn.getAttribute('data-tab');
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        document.getElementById(`${tabName}Tab`).classList.add('active');
+      });
     });
-  };
-
-  window.refreshAll = async function() {
-    await loadAppointments();
-    await loadReviews();
-  };
-
-  async function loadAppointments() {
-    try {
-      const bookings = await loadAllBookings();
-      document.getElementById('totalCount').textContent = bookings.length;
-      document.getElementById('pendingCount').textContent = bookings.filter(b => b.status === 'pending').length;
-      
-      const tbody = document.getElementById('appointmentsBody');
-      if (bookings.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7">No appointments yet</td></tr>';
-        return;
-      }
-      
-      tbody.innerHTML = bookings.map(apt => `
-        <tr>
-          <td>${apt.preferredDate || 'N/A'}</td>
-          <td>${escapeHtml(apt.name || '')}</td>
-          <td>${escapeHtml(apt.phone || '')}</td>
-          <td>${escapeHtml(apt.service || '')}</td>
-          <td><span class="status-${apt.status === 'confirmed' ? 'confirmed' : 'pending'}">${apt.status || 'pending'}</span></td>
-          <td style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(apt.message || '')}</td>
-          <td>
-            ${apt.status !== 'confirmed' ? `<button class="btn-confirm" onclick="confirmBooking('${apt.id}')">Confirm</button>` : ''}
-            <button class="btn-delete" onclick="deleteBookingItem('${apt.id}')">Delete</button>
-          </td>
-        </tr>
-      `).join('');
-    } catch (err) {
-      console.error(err);
-      document.getElementById('appointmentsBody').innerHTML = '<tr><td colspan="7">Error loading data</td></tr>';
-    }
-  }
-
-  async function loadReviews() {
-    try {
-      const allReviews = await loadAllReviews();
-      const pending = allReviews.filter(r => !r.approved);
-      const approved = allReviews.filter(r => r.approved === true);
-      
-      document.getElementById('pendingReviewsCount').textContent = pending.length;
-      
-      // Pending reviews
-      const pendingBody = document.getElementById('pendingReviewsBody');
-      if (pending.length === 0) {
-        pendingBody.innerHTML = '<tr><td colspan="6">No pending reviews</td></tr>';
-      } else {
-        pendingBody.innerHTML = pending.map(r => `
+    
+    async function loadAppointments() {
+      try {
+        console.log("Loading appointments...");
+        const bookings = await loadAllBookings();
+        console.log("Bookings loaded:", bookings);
+        
+        document.getElementById('totalAppointments').textContent = bookings.length;
+        document.getElementById('pendingAppointments').textContent = bookings.filter(b => b.status === 'pending').length;
+        
+        const tbody = document.getElementById('appointmentsList');
+        if (bookings.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center">No appointments yet</td></tr>';
+          return;
+        }
+        
+        tbody.innerHTML = bookings.map(apt => `
           <tr>
-            <td>${r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString() : 'N/A'}</td>
-            <td>${escapeHtml(r.name || '')}</td>
-            <td>${escapeHtml(r.service || '')}</td>
-            <td class="stars">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</td>
-            <td style="max-width:250px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(r.text || '')}</td>
+            <td>${apt.preferredDate || (apt.createdAt?.toDate ? apt.createdAt.toDate().toLocaleDateString() : 'N/A')}</td>
+            <td>${escapeHtml(apt.name || '')}</td>
+            <td>${escapeHtml(apt.phone || '')}</td>
+            <td>${escapeHtml(apt.service || '')}</td>
+            <td><span class="status-badge status-${apt.status === 'confirmed' ? 'confirmed' : 'pending'}">${apt.status || 'pending'}</span></td>
+            <td class="review-text-preview">${escapeHtml(apt.message || '')}</td>
             <td>
-              <button class="btn-approve" onclick="approveReviewItem('${r.id}')">Approve</button>
-              <button class="btn-delete" onclick="deleteReviewItem('${r.id}')">Delete</button>
+              ${apt.status !== 'confirmed' ? `<button class="action-btn btn-confirm" onclick="confirmBooking('${apt.id}')">Confirm</button>` : ''}
+              <button class="action-btn btn-delete" onclick="deleteBookingItem('${apt.id}')">Delete</button>
             </td>
           </tr>
         `).join('');
+      } catch (error) {
+        console.error('Error loading appointments:', error);
+        document.getElementById('appointmentsList').innerHTML = '<tr><td colspan="7" style="text-align:center;color:red;">Error loading data. Check console.</td></tr>';
       }
-      
-      // Approved reviews
-      const approvedBody = document.getElementById('approvedReviewsBody');
-      if (approved.length === 0) {
-        approvedBody.innerHTML = '<tr><td colspan="6">No approved reviews yet</td></tr>';
-      } else {
-        approvedBody.innerHTML = approved.map(r => `
-          <tr>
-            <td>${r.createdAt?.toDate ? r.createdAt.toDate().toLocaleDateString() : 'N/A'}</td>
-            <td>${escapeHtml(r.name || '')}</td>
-            <td>${escapeHtml(r.service || '')}</td>
-            <td class="stars">${'★'.repeat(r.stars)}${'☆'.repeat(5 - r.stars)}</td>
-            <td style="max-width:250px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${escapeHtml(r.text || '')}</td>
-            <td><button class="btn-delete" onclick="deleteReviewItem('${r.id}')">Delete</button></td>
-          </tr>
-        `).join('');
+    }
+    
+    async function loadReviewsData() {
+      try {
+        console.log("Loading reviews...");
+        const allReviews = await loadAllReviews();
+        console.log("Reviews loaded:", allReviews);
+        
+        const pending = allReviews.filter(r => !r.approved);
+        const approved = allReviews.filter(r => r.approved);
+        
+        document.getElementById('pendingReviewsCount').textContent = pending.length;
+        
+        // Pending reviews
+        const pendingTbody = document.getElementById('pendingReviewsList');
+        if (pending.length === 0) {
+          pendingTbody.innerHTML = '<tr><td colspan="6" style="text-align:center">No pending reviews</td></tr>';
+        } else {
+          pendingTbody.innerHTML = pending.map(review => `
+            <tr>
+              <td>${review.createdAt?.toDate ? review.createdAt.toDate().toLocaleDateString() : 'N/A'}</td>
+              <td>${escapeHtml(review.name || 'Anonymous')}</td>
+              <td>${escapeHtml(review.service || '')}</td>
+              <td><span class="stars">${'★'.repeat(review.stars)}${'☆'.repeat(5 - review.stars)}</span></td>
+              <td class="review-text-preview">${escapeHtml(review.text || '')}</td>
+              <td>
+                <button class="action-btn btn-approve" onclick="approveReviewItem('${review.id}')">Approve</button>
+                <button class="action-btn btn-view" onclick="viewReview('${escapeHtml(review.text || '')}', '${escapeHtml(review.name || '')}', ${review.stars})">View</button>
+                <button class="action-btn btn-delete" onclick="deleteReviewItem('${review.id}')">Delete</button>
+              </td>
+            </tr>
+          `).join('');
+        }
+        
+        // Approved reviews
+        const approvedTbody = document.getElementById('approvedReviewsList');
+        if (approved.length === 0) {
+          approvedTbody.innerHTML = '<tr><td colspan="6" style="text-align:center">No approved reviews yet</td></tr>';
+        } else {
+          approvedTbody.innerHTML = approved.map(review => `
+            <tr>
+              <td>${review.createdAt?.toDate ? review.createdAt.toDate().toLocaleDateString() : 'N/A'}</td>
+              <td>${escapeHtml(review.name || 'Anonymous')}</td>
+              <td>${escapeHtml(review.service || '')}</td>
+              <td><span class="stars">${'★'.repeat(review.stars)}${'☆'.repeat(5 - review.stars)}</span></td>
+              <td class="review-text-preview">${escapeHtml(review.text || '')}</td>
+              <td><button class="action-btn btn-delete" onclick="deleteReviewItem('${review.id}')">Delete</button></td>
+            </tr>
+          `).join('');
+        }
+      } catch (error) {
+        console.error('Error loading reviews:', error);
       }
-    } catch (err) {
-      console.error(err);
     }
-  }
-
-  window.confirmBooking = async function(id) {
-    if (confirm('Confirm this appointment?')) {
-      await updateBookingStatus(id, 'confirmed');
-      await loadAppointments();
+    
+    window.confirmBooking = async function(id) {
+      if (confirm('Confirm this appointment?')) {
+        await updateBookingStatus(id, 'confirmed');
+        await loadAppointments();
+      }
+    };
+    
+    window.deleteBookingItem = async function(id) {
+      if (confirm('Delete this appointment?')) {
+        await deleteBooking(id);
+        await loadAppointments();
+      }
+    };
+    
+    window.approveReviewItem = async function(id) {
+      if (confirm('Approve this review? It will appear on the website.')) {
+        await approveReview(id);
+        await loadReviewsData();
+      }
+    };
+    
+    window.deleteReviewItem = async function(id) {
+      if (confirm('Delete this review?')) {
+        await deleteReview(id);
+        await loadReviewsData();
+      }
+    };
+    
+    window.viewReview = function(text, name, stars) {
+      const modal = document.getElementById('reviewModal');
+      const modalBody = document.getElementById('modalBody');
+      modalBody.innerHTML = `
+        <h3>Review Details</h3>
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Rating:</strong> ${'★'.repeat(stars)}${'☆'.repeat(5-stars)}</p>
+        <p><strong>Review:</strong></p>
+        <p style="background:#f5efe8; padding:16px; border-radius:12px;">${escapeHtml(text)}</p>
+      `;
+      modal.style.display = 'flex';
+    };
+    
+    window.closeModal = function() {
+      document.getElementById('reviewModal').style.display = 'none';
+    };
+    
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+      });
     }
-  };
-
-  window.deleteBookingItem = async function(id) {
-    if (confirm('Delete this appointment?')) {
-      await deleteBooking(id);
-      await loadAppointments();
-    }
-  };
-
-  window.approveReviewItem = async function(id) {
-    if (confirm('Approve this review?')) {
-      await approveReview(id);
-      await loadReviews();
-    }
-  };
-
-  window.deleteReviewItem = async function(id) {
-    if (confirm('Delete this review?')) {
-      await deleteReview(id);
-      await loadReviews();
-    }
-  };
-
-  function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-      if (m === '&') return '&amp;';
-      if (m === '<') return '&lt;';
-      if (m === '>') return '&gt;';
-      return m;
-    });
-  }
-
-  // Check login status
-  if (sessionStorage.getItem('adminLoggedIn') === 'true') {
-    document.getElementById('loginPanel').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    refreshAll();
-  }
-</script>
+  </script>
 </body>
 </html>
