@@ -659,9 +659,26 @@
           <div class="field"><label for="bPhone">Phone number</label><input type="tel" id="bPhone" name="phone" placeholder="e.g. 082 000 0000" required /></div>
         </div>
         <div class="form-row-2">
-          <div class="field"><label for="bService">Service</label><select id="bService" name="service" required><option value="">Select a service…</option><option value="Cacau Brazilian + Colour (R950)">Cacau Brazilian + Colour — R950</option><option value="Botox + Colour (R850)">Botox + Colour — R850</option><option value="Relaxer + Treatment (R450)">Relaxer + Treatment — R450</option><option value="Half-head Highlights (R580)">Half-head Highlights — R580</option><option value="Redken Treatment (R380)">Redken Treatment — R380</option><option value="Fibre-Force Treatment (R420)">Fibre-Force Treatment — R420</option><option value="Full Head Colour (R550)">Full Head Colour — R550</option></select></div>
-          <div class="field"><label for="bDate">Preferred date</label><input type="date" id="bDate" name="date" required /></div>
-        </div>
+  <div class="field">
+    <label for="bDate">Preferred date</label>
+    <input type="date" id="bDate" name="date" required />
+  </div>
+  <div class="field">
+    <label for="bTime">Preferred time</label>
+    <select id="bTime" name="time" required>
+      <option value="">Select time...</option>
+      <option value="09:00">09:00 AM</option>
+      <option value="10:00">10:00 AM</option>
+      <option value="11:00">11:00 AM</option>
+      <option value="12:00">12:00 PM</option>
+      <option value="13:00">01:00 PM</option>
+      <option value="14:00">02:00 PM</option>
+      <option value="15:00">03:00 PM</option>
+      <option value="16:00">04:00 PM</option>
+      <option value="17:00">05:00 PM</option>
+    </select>
+  </div>
+</div>
         <div class="field"><label for="bNote">Message <span class="optional">(optional)</span></label><textarea id="bNote" name="message" rows="3" placeholder="Any special requests or notes…"></textarea></div>
         <button type="submit" class="btn btn-dark btn-full" id="bookingBtn"><span class="btn-text">Request appointment</span><span class="btn-loading hidden"><i class="ti ti-loader-2 spin"></i> Sending…</span></button>
         <div class="form-success hidden" id="bookingSuccess"><i class="ti ti-circle-check"></i> Thank you! Your booking request has been received. We'll call you to confirm.</div>
