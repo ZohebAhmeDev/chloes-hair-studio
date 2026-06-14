@@ -1,9 +1,0 @@
-export const firebaseConfig = {
-  apiKey: "AIzaSyD7rlKLVa823PXFQRUx0X8fXUrQxuBw7Eg",
-  authDomain: "chloes-hair-studio.firebaseapp.com",
-  projectId: "chloes-hair-studio",
-  storageBucket: "chloes-hair-studio.firebasestorage.app",
-  messagingSenderId: "495588109414",
-  appId: "1:495588109414:web:10815ad3d7c858388b51a7",
-  measurementId: "G-L8YK901BVP"
-};
