@@ -206,11 +206,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ── Smooth scroll for all anchor links ───────────────────
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener("click", (e) => {
-      const target = document.querySelector(anchor.getAttribute("href"));
+    anchor.addEventListener("click", function(e) {
+      const targetId = this.getAttribute("href");
+      const target = document.querySelector(targetId);
       if (target) {
         e.preventDefault();
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        // Close mobile menu first
+        const navLinks = document.querySelector(".nav-links");
+        if (navLinks) {
+          navLinks.classList.remove("open");
+        }
+        // Then scroll
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 150);
       }
     });
   });
