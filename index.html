@@ -17,7 +17,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
   <!-- Tabler Icons -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
   <style>
     /* ===== BASE & RESET (unchanged styling core, only image additions) ===== */
@@ -528,7 +528,7 @@
     }
     /* small salon gallery vibe: extra image block after reviews? Not required but we embed tiny image for charm without touching structure */
     .info-card:first-child {
-      background-image: url('https://images.unsplash.com/photo-1585747860719-2ba14246d2a2?q=80&w=2076&auto=format');
+      background-image: url('images/p1.jpg');
       background-size: 100px;
       background-repeat: no-repeat;
       background-position: bottom 20px right 20px;
@@ -551,7 +551,7 @@
       </ul>
       <a href="#booking" class="btn btn-dark nav-cta">Book now</a>
       <button class="nav-toggle" aria-label="Toggle menu">
-        <i class="ti ti-menu-2"></i>
+        <i class="fas fa-bars"></i>
       </button>
     </nav>
   </header>
@@ -586,7 +586,7 @@
 
       <div class="services-grid">
         <div class="service-card featured">
-          <div class="service-icon"><i class="ti ti-sparkles"></i></div>
+          <div class="service-icon"><i class="fas fa-sparkles"></i></div>
           <div class="service-info">
             <h3>Cacau Brazilian + Colour</h3>
             <p>Smooth, frizz-free treatment with full colour</p>
@@ -594,7 +594,7 @@
           <div class="service-price">R&nbsp;950</div>
         </div>
         <div class="service-card">
-          <div class="service-icon"><i class="ti ti-droplet"></i></div>
+          <div class="service-icon"><i class="fas fa-tint"></i></div>
           <div class="service-info">
             <h3>Botox + Colour</h3>
             <p>Deep revitalising botox treatment with colour</p>
@@ -602,7 +602,7 @@
           <div class="service-price">R&nbsp;850</div>
         </div>
         <div class="service-card">
-          <div class="service-icon"><i class="ti ti-scissors"></i></div>
+          <div class="service-icon"><i class="fas fa-cut"></i></div>
           <div class="service-info">
             <h3>Relaxer + Treatment</h3>
             <p>Chemical relaxer with conditioning treatment</p>
@@ -610,7 +610,7 @@
           <div class="service-price">R&nbsp;450</div>
         </div>
         <div class="service-card">
-          <div class="service-icon"><i class="ti ti-palette"></i></div>
+          <div class="service-icon"><i class="fas fa-palette"></i></div>
           <div class="service-info">
             <h3>Half-head Highlights</h3>
             <p>Partial foil highlights, any shade</p>
@@ -618,7 +618,7 @@
           <div class="service-price">R&nbsp;580</div>
         </div>
         <div class="service-card">
-          <div class="service-icon"><i class="ti ti-leaf"></i></div>
+          <div class="service-icon"><i class="fas fa-leaf"></i></div>
           <div class="service-info">
             <h3>Redken Treatment</h3>
             <p>Professional Redken in-salon care</p>
@@ -626,7 +626,7 @@
           <div class="service-price">R&nbsp;380</div>
         </div>
         <div class="service-card">
-          <div class="service-icon"><i class="ti ti-heart"></i></div>
+          <div class="service-icon"><i class="fas fa-heart"></i></div>
           <div class="service-info">
             <h3>Fibre-Force Treatment</h3>
             <p>Repair for over-processed hair</p>
@@ -634,7 +634,7 @@
           <div class="service-price">R&nbsp;420</div>
         </div>
         <div class="service-card">
-          <div class="service-icon"><i class="ti ti-brush"></i></div>
+          <div class="service-icon"><i class="fas fa-brush"></i></div>
           <div class="service-info">
             <h3>Full Head Colour</h3>
             <p>All-over colour application</p>
@@ -642,7 +642,7 @@
           <div class="service-price">R&nbsp;550</div>
         </div>
       </div>
-      <p class="services-note"><i class="ti ti-info-circle"></i> Enquire about our Wash / Blow / Flat Iron Voucher</p>
+      <p class="services-note"><i class="fas fa-info-circle"></i> Enquire about our Wash / Blow / Flat Iron Voucher</p>
     </div>
   </section>
 
@@ -689,8 +689,8 @@
           <div class="form-row-2"><div class="field"><label for="rName">Your name</label><input type="text" id="rName" name="name" placeholder="Name" required /></div><div class="field"><label for="rService">Service received</label><select id="rService" name="service"><option value="">Select service…</option><option>Cacau Brazilian + Colour</option><option>Botox + Colour</option><option>Relaxer + Treatment</option><option>Half-head Highlights</option><option>Redken Treatment</option><option>Fibre-Force Treatment</option><option>Full Head Colour</option></select></div></div>
           <div class="field"><label for="rText">Your review</label><textarea id="rText" name="review" rows="3" placeholder="Share your experience…" required></textarea></div>
           <button type="submit" class="btn btn-dark" id="reviewBtn"><span class="btn-text">Submit review</span><span class="btn-loading hidden"><i class="ti ti-loader-2 spin"></i> Submitting…</span></button>
-          <div class="form-success hidden" id="reviewSuccess"><i class="ti ti-circle-check"></i> Thank you for your review!</div>
-          <div class="form-error hidden" id="reviewError"><i class="ti ti-alert-circle"></i> Submission failed. Please try again.</div>
+          <div class="form-success hidden" id="reviewSuccess"><i class="fas fa-check-circle"></i> Thank you for your review!</div>
+          <div class="form-error hidden" id="reviewError"><i class="fas fa-exclamation-circle"></i> Submission failed. Please try again.</div>
         </form>
       </div>
     </div>
@@ -703,7 +703,7 @@
       <h2 class="section-title">Location &amp; hours</h2>
       <div class="info-grid">
         <div class="info-card">
-          <h3><i class="ti ti-clock"></i> Opening hours</h3>
+          <h3><i class="fas fa-clock"></i> Opening hours</h3>
           <table class="hours-table">
             <tr><td>Monday</td><td>8:30 am – 6 pm</td></tr>
             <tr><td>Tuesday</td><td>8:30 am – 6 pm</td></tr>
@@ -713,14 +713,14 @@
             <tr><td>Saturday</td><td>8 am – 4 pm</td></tr>
             <tr><td>Sunday</td><td>9 am – 2 pm</td></tr>
           </table>
-          <p class="hours-note"><i class="ti ti-info-circle"></i> Hours may differ on public holidays</p>
+          <p class="hours-note"><i class="fas fa-info-circle"></i> Hours may differ on public holidays</p>
         </div>
         <div class="info-card">
-          <h3><i class="ti ti-map-pin"></i> Address &amp; contact</h3>
+          <h3><i class="fas fa-map-pin"></i> Address &amp; contact</h3>
           <ul class="contact-list">
-            <li><i class="ti ti-building-store"></i><span>Shop F115, Parow Centre<br>Voortrekker Rd, Parow<br>Cape Town, 7500</span></li>
-            <li><i class="ti ti-phone"></i><a href="tel:0218205003">021 820 5003</a></li>
-            <li><i class="ti ti-info-circle"></i><span>Close to Pick n Pay, opposite Burger King</span></li>
+            <li><i class="fas fa-store"></i><span>Shop F115, Parow Centre<br>Voortrekker Rd, Parow<br>Cape Town, 7500</span></li>
+            <li><i class="fas fa-phone"></i><a href="tel:0218205003">021 820 5003</a></li>
+            <li><i class="fas fa-info-circle"></i><span>Close to Pick n Pay, opposite Burger King</span></li>
           </ul>
           <a href="https://maps.google.com/?q=Shop+F115+Parow+Centre+Voortrekker+Rd+Parow+Cape+Town" target="_blank" class="map-link"><i class="ti ti-map"></i> Open in Google Maps</a>
         </div>
