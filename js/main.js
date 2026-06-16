@@ -5,6 +5,8 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
+  console.log("✅ DOM loaded");
+
   // ── Copyright year ────────────────────────────────────────
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -13,11 +15,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const navToggle = document.querySelector(".nav-toggle");
   const navLinks = document.querySelector(".nav-links");
   
+  console.log("🔍 navToggle:", navToggle);
+  console.log("🔍 navLinks:", navLinks);
+  
   if (navToggle && navLinks) {
     // Toggle menu on button click
     navToggle.addEventListener("click", function(e) {
       e.stopPropagation();
+      console.log("🔄 Toggle clicked - current class:", navLinks.classList.contains("open"));
       navLinks.classList.toggle("open");
+      console.log("🔄 After toggle - class now:", navLinks.classList.contains("open"));
     });
   }
 
@@ -178,22 +185,30 @@ document.addEventListener("DOMContentLoaded", () => {
   // ── Smooth scroll and close menu ──────────────────────────
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener("click", function(e) {
+      console.log("🔗 Link clicked:", this.getAttribute("href"));
+      
       const targetId = this.getAttribute("href");
       const target = document.querySelector(targetId);
       
       if (target) {
         e.preventDefault();
+        console.log("🎯 Target found:", targetId);
         
         // Close mobile menu FIRST
         const navLinks = document.querySelector(".nav-links");
         if (navLinks) {
+          console.log("📱 Closing menu - before:", navLinks.classList.contains("open"));
           navLinks.classList.remove("open");
+          console.log("📱 Closing menu - after:", navLinks.classList.contains("open"));
         }
         
         // Scroll to target after a tiny delay
         setTimeout(() => {
+          console.log("📜 Scrolling to:", targetId);
           target.scrollIntoView({ behavior: "smooth", block: "start" });
         }, 200);
+      } else {
+        console.log("❌ Target not found:", targetId);
       }
     });
   });
@@ -205,6 +220,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
     if (navLinks && navLinks.classList.contains("open")) {
       if (navToggle && !navToggle.contains(e.target) && !navLinks.contains(e.target)) {
+        console.log("👆 Clicked outside - closing menu");
         navLinks.classList.remove("open");
       }
     }
@@ -220,4 +236,5 @@ document.addEventListener("DOMContentLoaded", () => {
       .replace(/'/g, "&#039;");
   }
 
+  console.log("✅ main.js loaded completely");
 });
