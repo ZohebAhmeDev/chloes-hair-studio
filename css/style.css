@@ -528,3 +528,32 @@ select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.o
     color: var(--gold-dark);
   }
 }
+
+/* ── Hero Stats - Mobile Fix ────────────────────────────────── */
+@media (max-width: 680px) {
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+    padding: 1.5rem 0.5rem 0;
+    border-top: 1px solid rgba(248,240,227,0.12);
+  }
+  
+  .stat-divider {
+    display: none;
+  }
+  
+  .stat {
+    text-align: center;
+    padding: 0.5rem;
+  }
+  
+  .stat-num {
+    font-size: 16px;
+  }
+  
+  .stat-label {
+    font-size: 10px;
+    margin-top: 2px;
+  }
+}
