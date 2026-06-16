@@ -121,30 +121,48 @@ button { font-family: var(--font-sans); cursor: pointer; }
 .nav-cta { margin-left: 1rem; padding: 9px 20px; font-size: 13px; }
 .nav-toggle { display: none; background: none; border: none; font-size: 22px; color: var(--text); }
 
-/* Mobile nav */
+/* ── Mobile nav with checkbox ──────────────────────────── */
+.nav-toggle-checkbox {
+  display: none;
+}
+
+.nav-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--text);
+  padding: 5px;
+}
+
 @media (max-width: 680px) {
-  .nav-links { 
-    display: none; 
-    flex-direction: column; 
-    position: absolute; 
-    top: var(--nav-h); 
-    left: 0; 
-    right: 0; 
-    background: #fff; 
-    border-bottom: 1px solid var(--border); 
-    padding: 1rem 1.5rem; 
-    gap: 1rem; 
+  .nav-toggle {
+    display: block;
+  }
+  
+  .nav-links {
+    display: none !important;
+    flex-direction: column;
+    position: absolute;
+    top: var(--nav-h);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem;
+    gap: 1rem;
     z-index: 999;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   }
-  .nav-links.open { 
-    display: flex !important; 
+  
+  /* Show menu when checkbox is checked */
+  .nav-toggle-checkbox:checked ~ .nav-links {
+    display: flex !important;
   }
-  .nav-cta { 
-    display: none; 
-  }
-  .nav-toggle { 
-    display: block; 
-    margin-left: auto; 
+  
+  .nav-cta {
+    display: none;
   }
 }
 

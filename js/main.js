@@ -5,28 +5,9 @@
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  console.log("✅ DOM loaded");
-
   // ── Copyright year ────────────────────────────────────────
   const yearEl = document.getElementById("year");
   if (yearEl) yearEl.textContent = new Date().getFullYear();
-
-  // ── Mobile nav toggle ─────────────────────────────────────
-  const navToggle = document.querySelector(".nav-toggle");
-  const navLinks = document.querySelector(".nav-links");
-  
-  console.log("🔍 navToggle:", navToggle);
-  console.log("🔍 navLinks:", navLinks);
-  
-  if (navToggle && navLinks) {
-    // Toggle menu on button click
-    navToggle.addEventListener("click", function(e) {
-      e.stopPropagation();
-      console.log("🔄 Toggle clicked - current class:", navLinks.classList.contains("open"));
-      navLinks.classList.toggle("open");
-      console.log("🔄 After toggle - class now:", navLinks.classList.contains("open"));
-    });
-  }
 
   // ── Set min booking date to today ─────────────────────────
   const dateInput = document.getElementById("bDate");
@@ -182,48 +163,27 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   loadFirebaseReviews();
 
-  // ── Smooth scroll and close menu ──────────────────────────
+  // ── Smooth scroll for all anchor links ───────────────────
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener("click", function(e) {
-      console.log("🔗 Link clicked:", this.getAttribute("href"));
-      
       const targetId = this.getAttribute("href");
       const target = document.querySelector(targetId);
       
       if (target) {
         e.preventDefault();
-        console.log("🎯 Target found:", targetId);
         
-        // Close mobile menu FIRST
-        const navLinks = document.querySelector(".nav-links");
-        if (navLinks) {
-          console.log("📱 Closing menu - before:", navLinks.classList.contains("open"));
-          navLinks.classList.remove("open");
-          console.log("📱 Closing menu - after:", navLinks.classList.contains("open"));
+        // Uncheck the checkbox to close menu
+        const checkbox = document.getElementById('nav-toggle-checkbox');
+        if (checkbox) {
+          checkbox.checked = false;
         }
         
-        // Scroll to target after a tiny delay
+        // Scroll to target
         setTimeout(() => {
-          console.log("📜 Scrolling to:", targetId);
           target.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 200);
-      } else {
-        console.log("❌ Target not found:", targetId);
+        }, 100);
       }
     });
-  });
-
-  // ── Close menu when clicking outside ──────────────────────
-  document.addEventListener("click", function(e) {
-    const navToggle = document.querySelector(".nav-toggle");
-    const navLinks = document.querySelector(".nav-links");
-    
-    if (navLinks && navLinks.classList.contains("open")) {
-      if (navToggle && !navToggle.contains(e.target) && !navLinks.contains(e.target)) {
-        console.log("👆 Clicked outside - closing menu");
-        navLinks.classList.remove("open");
-      }
-    }
   });
 
   // ── Utility: escape HTML for user content ─────────────────
@@ -236,5 +196,4 @@ document.addEventListener("DOMContentLoaded", () => {
       .replace(/'/g, "&#039;");
   }
 
-  console.log("✅ main.js loaded completely");
 });
