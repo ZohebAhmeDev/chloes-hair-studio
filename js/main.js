@@ -11,35 +11,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ── Mobile nav toggle ─────────────────────────────────────
   const navToggle = document.querySelector(".nav-toggle");
-  const navLinks  = document.querySelector(".nav-links");
+  const navLinks = document.querySelector(".nav-links");
   
   if (navToggle && navLinks) {
     // Toggle menu on button click
     navToggle.addEventListener("click", function(e) {
       e.stopPropagation();
       navLinks.classList.toggle("open");
-    });
-    
-    // Close menu function
-    function closeMenu() {
-      navLinks.classList.remove("open");
-    }
-    
-    // Close menu when a link is clicked - use setTimeout to ensure it happens after scroll
-    navLinks.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", function() {
-        // Small delay to ensure the click event completes
-        setTimeout(closeMenu, 100);
-      });
-    });
-    
-    // Close menu when clicking outside
-    document.addEventListener("click", function(e) {
-      if (navLinks.classList.contains("open")) {
-        if (!navLinks.contains(e.target) && e.target !== navToggle && !navToggle.contains(e.target)) {
-          closeMenu();
-        }
-      }
     });
   }
 
@@ -101,13 +79,12 @@ document.addEventListener("DOMContentLoaded", () => {
     bookingForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const name    = document.getElementById("bName")?.value.trim();
-      const phone   = document.getElementById("bPhone")?.value.trim();
+      const name = document.getElementById("bName")?.value.trim();
+      const phone = document.getElementById("bPhone")?.value.trim();
       const service = document.getElementById("bService")?.value;
-      const date    = document.getElementById("bDate")?.value;
+      const date = document.getElementById("bDate")?.value;
       const message = document.getElementById("bNote")?.value.trim();
 
-      // Basic validation
       if (!name || !phone || !service || !date) {
         alert("Please fill in all required fields.");
         return;
@@ -119,10 +96,8 @@ document.addEventListener("DOMContentLoaded", () => {
       showMsg("bookingError", false);
 
       try {
-        // Dynamic import so page loads even without Firebase configured
         const { saveBooking } = await import("./firebase.js");
         await saveBooking({ name, phone, service, date, message });
-
         showMsg("bookingSuccess", true);
         bookingForm.reset();
       } catch (err) {
@@ -140,10 +115,10 @@ document.addEventListener("DOMContentLoaded", () => {
     reviewForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const name    = document.getElementById("rName")?.value.trim();
-      const review  = document.getElementById("rText")?.value.trim();
+      const name = document.getElementById("rName")?.value.trim();
+      const review = document.getElementById("rText")?.value.trim();
       const service = document.getElementById("rService")?.value;
-      const stars   = parseInt(document.getElementById("rStars")?.value || "0");
+      const stars = parseInt(document.getElementById("rStars")?.value || "0");
 
       if (!name || !review || stars < 1) {
         alert("Please fill in your name, review, and star rating.");
@@ -158,10 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         const { saveReview } = await import("./firebase.js");
         await saveReview({ name, review, service, stars });
-
-        // Optimistically add to grid (pending approval note)
         addReviewCard({ name, review, stars, pending: true });
-
         showMsg("reviewSuccess", true);
         reviewForm.reset();
         selectedStars = 0;
@@ -182,7 +154,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const card = document.createElement("div");
     card.className = "review-card";
-
     const starStr = "★".repeat(stars) + "☆".repeat(5 - stars);
     card.innerHTML = `
       <div class="review-stars">${starStr}</div>
@@ -204,24 +175,39 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   loadFirebaseReviews();
 
-  // ── Smooth scroll for all anchor links ───────────────────
+  // ── Smooth scroll and close menu ──────────────────────────
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener("click", function(e) {
       const targetId = this.getAttribute("href");
       const target = document.querySelector(targetId);
+      
       if (target) {
         e.preventDefault();
-        // Close mobile menu first
+        
+        // Close mobile menu FIRST
         const navLinks = document.querySelector(".nav-links");
         if (navLinks) {
           navLinks.classList.remove("open");
         }
-        // Then scroll
+        
+        // Scroll to target after a tiny delay
         setTimeout(() => {
           target.scrollIntoView({ behavior: "smooth", block: "start" });
-        }, 150);
+        }, 200);
       }
     });
+  });
+
+  // ── Close menu when clicking outside ──────────────────────
+  document.addEventListener("click", function(e) {
+    const navToggle = document.querySelector(".nav-toggle");
+    const navLinks = document.querySelector(".nav-links");
+    
+    if (navLinks && navLinks.classList.contains("open")) {
+      if (navToggle && !navToggle.contains(e.target) && !navLinks.contains(e.target)) {
+        navLinks.classList.remove("open");
+      }
+    }
   });
 
   // ── Utility: escape HTML for user content ─────────────────

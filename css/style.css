@@ -134,9 +134,10 @@ button { font-family: var(--font-sans); cursor: pointer; }
     border-bottom: 1px solid var(--border); 
     padding: 1rem 1.5rem; 
     gap: 1rem; 
+    z-index: 999;
   }
   .nav-links.open { 
-    display: flex; 
+    display: flex !important; 
   }
   .nav-cta { 
     display: none; 
