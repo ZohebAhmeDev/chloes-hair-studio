@@ -230,13 +230,339 @@
       th, td { padding: 10px; font-size: 0.85rem; }
       .action-btn { padding: 4px 10px; margin: 2px; }
     }
+
+    /* ── Admin Panel Enhanced Styles ────────────────────────────── */
+
+/* Icons - Professional Colors */
+.ti-crown, .fa-crown {
+  color: #d99e4a; /* Gold theme color */
+}
+
+/* Star ratings - Gold/Yellow */
+.stars {
+  color: #f5b042;
+}
+
+/* Status Badges */
+.status-pending { 
+  background: #fff3e0; 
+  color: #cc7b2c; 
+}
+.status-confirmed { 
+  background: #e8f5e9; 
+  color: #2e7d32; 
+}
+
+/* Action Buttons - With Hover Effects */
+.action-btn {
+  padding: 6px 16px;
+  margin: 0 4px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.action-btn:active {
+  transform: translateY(0px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Approve Button - Green */
+.btn-approve { 
+  background: #4caf50; 
+  color: white; 
+}
+.btn-approve:hover { 
+  background: #388e3c; 
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+.btn-approve i {
+  color: white;
+}
+
+/* Confirm Button - Blue */
+.btn-confirm { 
+  background: #2196f3; 
+  color: white; 
+}
+.btn-confirm:hover { 
+  background: #1976d2; 
+  box-shadow: 0 4px 12px rgba(33, 150, 243, 0.4);
+}
+.btn-confirm i {
+  color: white;
+}
+
+/* View Button - Orange/Gold */
+.btn-view { 
+  background: #ff9800; 
+  color: white; 
+}
+.btn-view:hover { 
+  background: #f57c00; 
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.4);
+}
+.btn-view i {
+  color: white;
+}
+
+/* Delete Button - Red with hover */
+.btn-delete { 
+  background: #f44336; 
+  color: white; 
+}
+.btn-delete:hover { 
+  background: #c62828; 
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+}
+.btn-delete i {
+  color: white;
+}
+
+/* Tab Buttons - Enhanced */
+.tab-btn {
+  padding: 12px 28px;
+  background: white;
+  border: 1px solid #e0d0c0;
+  border-radius: 40px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+}
+
+.tab-btn:hover {
+  background: #f5efe8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.tab-btn.active {
+  background: #2c2418;
+  color: white;
+  box-shadow: 0 4px 12px rgba(44, 36, 24, 0.3);
+}
+
+.tab-btn i {
+  font-size: 1.1rem;
+}
+
+.tab-btn.active i {
+  color: #d99e4a;
+}
+
+/* Dashboard Header Icons */
+.header h1 i {
+  color: #d99e4a;
+}
+
+/* Stat Cards - Enhanced */
+.stat-card {
+  background: white;
+  padding: 24px;
+  border-radius: 24px;
+  text-align: center;
+  transition: all 0.3s ease;
+  border: 1px solid #f0e4d8;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #d99e4a;
+}
+
+/* Refresh & Logout Buttons */
+.refresh-btn, .logout-btn {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+}
+
+.refresh-btn {
+  background: #dcb085;
+  color: #2c2418;
+}
+
+.refresh-btn:hover {
+  background: #c9a074;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(220, 176, 133, 0.4);
+}
+
+.logout-btn {
+  background: #f44336;
+  color: white;
+}
+
+.logout-btn:hover {
+  background: #c62828;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+}
+
+/* Table Row Hover Effect */
+.table-wrapper table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.table-wrapper table tbody tr:hover {
+  background-color: #faf5ef;
+}
+
+/* Modal - Enhanced */
+.modal-content {
+  background: white;
+  padding: 32px;
+  border-radius: 28px;
+  max-width: 500px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.modal-content h3 {
+  color: #2c2418;
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+}
+
+.close-modal {
+  float: right;
+  background: none;
+  border: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #999;
+  transition: color 0.2s;
+}
+
+.close-modal:hover {
+  color: #333;
+}
+
+/* Login Panel - Enhanced */
+.login-panel {
+  max-width: 400px;
+  margin: 80px auto;
+  background: white;
+  padding: 40px;
+  border-radius: 28px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.login-panel h1 {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+  color: #a26a3b;
+}
+
+.login-panel h1 i {
+  color: #d99e4a;
+}
+
+.login-panel input {
+  width: 100%;
+  padding: 14px 18px;
+  margin: 16px 0;
+  border: 2px solid #e0d0c0;
+  border-radius: 40px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.login-panel input:focus {
+  border-color: #d99e4a;
+  outline: none;
+}
+
+.login-panel button {
+  width: 100%;
+  padding: 14px;
+  background: #2c2418;
+  color: white;
+  border: none;
+  border-radius: 40px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.login-panel button:hover {
+  background: #d99e4a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(217, 158, 74, 0.4);
+}
+
+/* Mobile Responsive - Admin */
+@media (max-width: 768px) {
+  th, td { 
+    padding: 10px; 
+    font-size: 0.8rem; 
+  }
+  
+  .action-btn { 
+    padding: 4px 10px; 
+    margin: 2px;
+    font-size: 0.7rem;
+  }
+  
+  .tab-btn {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
+  
+  .stat-card {
+    padding: 16px;
+  }
+  
+  .stat-number {
+    font-size: 2rem;
+  }
+  
+  .header h1 {
+    font-size: 1.3rem;
+  }
+  
+  .refresh-btn, .logout-btn {
+    padding: 8px 16px;
+    font-size: 0.8rem;
+  }
+}
   </style>
 </head>
 <body>
   <div class="container">
     <!-- Login Panel -->
     <div id="loginPanel" class="login-panel">
-      <h1>🔐 Admin Access</h1>
+      <h1><i class="fas fa-crown"></i> Admin Dashboard</h1>
       <p>Chloe's Hair Studio</p>
       <input type="password" id="adminPassword" placeholder="Enter password" />
       <button onclick="attemptLogin()">Login to Dashboard</button>
