@@ -20,18 +20,24 @@ document.addEventListener("DOMContentLoaded", () => {
       navLinks.classList.toggle("open");
     });
     
-    // Close menu when a link is clicked
+    // Close menu function
+    function closeMenu() {
+      navLinks.classList.remove("open");
+    }
+    
+    // Close menu when a link is clicked - use setTimeout to ensure it happens after scroll
     navLinks.querySelectorAll("a").forEach(link => {
       link.addEventListener("click", function() {
-        navLinks.classList.remove("open");
+        // Small delay to ensure the click event completes
+        setTimeout(closeMenu, 100);
       });
     });
     
     // Close menu when clicking outside
     document.addEventListener("click", function(e) {
       if (navLinks.classList.contains("open")) {
-        if (!navLinks.contains(e.target) && !navToggle.contains(e.target)) {
-          navLinks.classList.remove("open");
+        if (!navLinks.contains(e.target) && e.target !== navToggle && !navToggle.contains(e.target)) {
+          closeMenu();
         }
       }
     });
