@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
         // Dynamic import so page loads even without Firebase configured
-        const { saveBooking } = await import("../firebase.js");
+        const { saveBooking } = await import("./firebase.js");
         await saveBooking({ name, phone, service, date, message });
 
         showMsg("bookingSuccess", true);
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
       showMsg("reviewError", false);
 
       try {
-        const { saveReview } = await import("../firebase.js");
+        const { saveReview } = await import("./firebase.js");
         await saveReview({ name, review, service, stars });
 
         // Optimistically add to grid (pending approval note)
@@ -171,7 +171,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ── Load Firebase reviews on page load ────────────────────
   async function loadFirebaseReviews() {
     try {
-      const { loadReviews } = await import("../firebase.js");
+      const { loadReviews } = await import("./firebase.js");
       const reviews = await loadReviews();
       reviews.forEach(r => addReviewCard({ name: r.name, review: r.review, stars: r.stars }));
     } catch {
