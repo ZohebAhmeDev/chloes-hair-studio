@@ -12,10 +12,28 @@ document.addEventListener("DOMContentLoaded", () => {
   // ── Mobile nav toggle ─────────────────────────────────────
   const navToggle = document.querySelector(".nav-toggle");
   const navLinks  = document.querySelector(".nav-links");
+  
   if (navToggle && navLinks) {
-    navToggle.addEventListener("click", () => navLinks.classList.toggle("open"));
-    navLinks.querySelectorAll("a").forEach(a => {
-      a.addEventListener("click", () => navLinks.classList.remove("open"));
+    // Toggle menu on button click
+    navToggle.addEventListener("click", function(e) {
+      e.stopPropagation();
+      navLinks.classList.toggle("open");
+    });
+    
+    // Close menu when a link is clicked
+    navLinks.querySelectorAll("a").forEach(link => {
+      link.addEventListener("click", function() {
+        navLinks.classList.remove("open");
+      });
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener("click", function(e) {
+      if (navLinks.classList.contains("open")) {
+        if (!navLinks.contains(e.target) && !navToggle.contains(e.target)) {
+          navLinks.classList.remove("open");
+        }
+      }
     });
   }
 

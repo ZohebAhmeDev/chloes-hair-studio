@@ -123,10 +123,28 @@ button { font-family: var(--font-sans); cursor: pointer; }
 
 /* Mobile nav */
 @media (max-width: 680px) {
-  .nav-links { display: none; flex-direction: column; position: absolute; top: var(--nav-h); left: 0; right: 0; background: #fff; border-bottom: 1px solid var(--border); padding: 1rem 1.5rem; gap: 1rem; }
-  .nav-links.open { display: flex; }
-  .nav-cta { display: none; }
-  .nav-toggle { display: block; margin-left: auto; }
+  .nav-links { 
+    display: none; 
+    flex-direction: column; 
+    position: absolute; 
+    top: var(--nav-h); 
+    left: 0; 
+    right: 0; 
+    background: #fff; 
+    border-bottom: 1px solid var(--border); 
+    padding: 1rem 1.5rem; 
+    gap: 1rem; 
+  }
+  .nav-links.open { 
+    display: flex; 
+  }
+  .nav-cta { 
+    display: none; 
+  }
+  .nav-toggle { 
+    display: block; 
+    margin-left: auto; 
+  }
 }
 
 /* ── Hero ────────────────────────────────────────────── */
