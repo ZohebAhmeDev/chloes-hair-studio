@@ -314,26 +314,37 @@
     // Simple password - CHANGE THIS to whatever you want
     const ADMIN_PASSWORD = "admin123";
     
-    // Make functions available globally
+    // DOM Elements
+    const loginPanel = document.getElementById('loginPanel');
+    const dashboard = document.getElementById('dashboard');
+    const adminPassword = document.getElementById('adminPassword');
+    const loginError = document.getElementById('loginError');
+    
+    // Make login function available globally
     window.attemptLogin = function() {
-      const password = document.getElementById('adminPassword').value;
+      const password = adminPassword.value;
       if (password === ADMIN_PASSWORD) {
         sessionStorage.setItem('adminLoggedIn', 'true');
-        document.getElementById('loginPanel').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
+        loginPanel.style.display = 'none';
+        dashboard.style.display = 'block';
         refreshAll();
       } else {
-        document.getElementById('loginError').style.display = 'block';
+        loginError.style.display = 'block';
       }
     };
     
+    // Make logout function available globally
     window.logout = function() {
       sessionStorage.removeItem('adminLoggedIn');
-      document.getElementById('loginPanel').style.display = 'block';
-      document.getElementById('dashboard').style.display = 'none';
-      document.getElementById('adminPassword').value = '';
+      loginPanel.style.display = 'block';
+      dashboard.style.display = 'none';
+      adminPassword.value = '';
+      // Reset dashboard display
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.getElementById('appointmentsTab').classList.add('active');
     };
     
+    // Make refresh function available globally
     window.refreshAll = async function() {
       console.log("Refreshing data...");
       await loadAppointments();
@@ -342,57 +353,78 @@
     
     // Check if already logged in
     if (sessionStorage.getItem('adminLoggedIn') === 'true') {
-      document.getElementById('loginPanel').style.display = 'none';
-      document.getElementById('dashboard').style.display = 'block';
+      loginPanel.style.display = 'none';
+      dashboard.style.display = 'block';
       refreshAll();
     }
     
-    // Tab switching
+    // Tab switching - Fix for multiple tabs
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         const tabName = btn.getAttribute('data-tab');
         document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-        document.getElementById(`${tabName}Tab`).classList.add('active');
+        const targetTab = document.getElementById(`${tabName}Tab`);
+        if (targetTab) targetTab.classList.add('active');
       });
     });
     
+    // Load Appointments
     async function loadAppointments() {
       try {
         console.log("Loading appointments...");
         const bookings = await loadAllBookings();
         console.log("Bookings loaded:", bookings);
         
-        document.getElementById('totalAppointments').textContent = bookings.length;
-        document.getElementById('pendingAppointments').textContent = bookings.filter(b => b.status === 'pending').length;
-        
+        const totalEl = document.getElementById('totalAppointments');
+        const pendingEl = document.getElementById('pendingAppointments');
         const tbody = document.getElementById('appointmentsList');
+        
+        if (totalEl) totalEl.textContent = bookings.length;
+        if (pendingEl) pendingEl.textContent = bookings.filter(b => b.status === 'pending').length;
+        
+        if (!tbody) return;
+        
         if (bookings.length === 0) {
           tbody.innerHTML = '<tr><td colspan="7" style="text-align:center">No appointments yet</td></tr>';
           return;
         }
         
-        tbody.innerHTML = bookings.map(apt => `
-          <tr>
-            <td>${apt.preferredDate || (apt.createdAt?.toDate ? apt.createdAt.toDate().toLocaleDateString() : 'N/A')}</td>
-            <td>${escapeHtml(apt.name || '')}</td>
-            <td>${escapeHtml(apt.phone || '')}</td>
-            <td>${escapeHtml(apt.service || '')}</td>
-            <td><span class="status-badge status-${apt.status === 'confirmed' ? 'confirmed' : 'pending'}">${apt.status || 'pending'}</span></td>
-            <td class="review-text-preview">${escapeHtml(apt.message || '')}</td>
-            <td>
-              ${apt.status !== 'confirmed' ? `<button class="action-btn btn-confirm" onclick="confirmBooking('${apt.id}')">Confirm</button>` : ''}
-              <button class="action-btn btn-delete" onclick="deleteBookingItem('${apt.id}')">Delete</button>
-            </td>
-          </tr>
-        `).join('');
+        tbody.innerHTML = bookings.map(apt => {
+          // Handle date display safely
+          let dateDisplay = 'N/A';
+          if (apt.preferredDate) {
+            dateDisplay = apt.preferredDate;
+          } else if (apt.createdAt && apt.createdAt.toDate) {
+            dateDisplay = apt.createdAt.toDate().toLocaleDateString();
+          }
+          
+          return `
+            <tr>
+              <td>${dateDisplay}</td>
+              <td>${escapeHtml(apt.name || '')}</td>
+              <td>${escapeHtml(apt.phone || '')}</td>
+              <td>${escapeHtml(apt.service || '')}</td>
+              <td><span class="status-badge status-${apt.status === 'confirmed' ? 'confirmed' : 'pending'}">${apt.status || 'pending'}</span></td>
+              <td class="review-text-preview">${escapeHtml(apt.message || '')}</td>
+              <td>
+                ${apt.status !== 'confirmed' ? `<button class="action-btn btn-confirm" onclick="window.confirmBooking('${apt.id}')">Confirm</button>` : ''}
+                <button class="action-btn btn-delete" onclick="window.deleteBookingItem('${apt.id}')">Delete</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
       } catch (error) {
         console.error('Error loading appointments:', error);
-        document.getElementById('appointmentsList').innerHTML = '<tr><td colspan="7" style="text-align:center;color:red;">Error loading data. Check console.</td></tr>';
+        const tbody = document.getElementById('appointmentsList');
+        if (tbody) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:red;">Error loading data. Check console.</td></tr>';
+        }
       }
     }
     
+    // Load Reviews
     async function loadReviewsData() {
       try {
         console.log("Loading reviews...");
@@ -402,50 +434,68 @@
         const pending = allReviews.filter(r => !r.approved);
         const approved = allReviews.filter(r => r.approved);
         
-        document.getElementById('pendingReviewsCount').textContent = pending.length;
+        const pendingCount = document.getElementById('pendingReviewsCount');
+        if (pendingCount) pendingCount.textContent = pending.length;
         
         // Pending reviews
         const pendingTbody = document.getElementById('pendingReviewsList');
-        if (pending.length === 0) {
-          pendingTbody.innerHTML = '<tr><td colspan="6" style="text-align:center">No pending reviews</td></tr>';
-        } else {
-          pendingTbody.innerHTML = pending.map(review => `
-            <tr>
-              <td>${review.createdAt?.toDate ? review.createdAt.toDate().toLocaleDateString() : 'N/A'}</td>
-              <td>${escapeHtml(review.name || 'Anonymous')}</td>
-              <td>${escapeHtml(review.service || '')}</td>
-              <td><span class="stars">${'★'.repeat(review.stars)}${'☆'.repeat(5 - review.stars)}</span></td>
-              <td class="review-text-preview">${escapeHtml(review.text || '')}</td>
-              <td>
-                <button class="action-btn btn-approve" onclick="approveReviewItem('${review.id}')">Approve</button>
-                <button class="action-btn btn-view" onclick="viewReview('${escapeHtml(review.text || '')}', '${escapeHtml(review.name || '')}', ${review.stars})">View</button>
-                <button class="action-btn btn-delete" onclick="deleteReviewItem('${review.id}')">Delete</button>
-              </td>
-            </tr>
-          `).join('');
+        if (pendingTbody) {
+          if (pending.length === 0) {
+            pendingTbody.innerHTML = '<tr><td colspan="6" style="text-align:center">No pending reviews</td></tr>';
+          } else {
+            pendingTbody.innerHTML = pending.map(review => {
+              let dateDisplay = 'N/A';
+              if (review.createdAt && review.createdAt.toDate) {
+                dateDisplay = review.createdAt.toDate().toLocaleDateString();
+              }
+              return `
+                <tr>
+                  <td>${dateDisplay}</td>
+                  <td>${escapeHtml(review.name || 'Anonymous')}</td>
+                  <td>${escapeHtml(review.service || '')}</td>
+                  <td><span class="stars">${'★'.repeat(review.stars)}${'☆'.repeat(5 - review.stars)}</span></td>
+                  <td class="review-text-preview">${escapeHtml(review.text || review.review || '')}</td>
+                  <td>
+                    <button class="action-btn btn-approve" onclick="window.approveReviewItem('${review.id}')">Approve</button>
+                    <button class="action-btn btn-view" onclick="window.viewReview('${escapeHtml(review.text || review.review || '')}', '${escapeHtml(review.name || '')}', ${review.stars})">View</button>
+                    <button class="action-btn btn-delete" onclick="window.deleteReviewItem('${review.id}')">Delete</button>
+                  </td>
+                </tr>
+              `;
+            }).join('');
+          }
         }
         
         // Approved reviews
         const approvedTbody = document.getElementById('approvedReviewsList');
-        if (approved.length === 0) {
-          approvedTbody.innerHTML = '<tr><td colspan="6" style="text-align:center">No approved reviews yet</td></tr>';
-        } else {
-          approvedTbody.innerHTML = approved.map(review => `
-            <tr>
-              <td>${review.createdAt?.toDate ? review.createdAt.toDate().toLocaleDateString() : 'N/A'}</td>
-              <td>${escapeHtml(review.name || 'Anonymous')}</td>
-              <td>${escapeHtml(review.service || '')}</td>
-              <td><span class="stars">${'★'.repeat(review.stars)}${'☆'.repeat(5 - review.stars)}</span></td>
-              <td class="review-text-preview">${escapeHtml(review.text || '')}</td>
-              <td><button class="action-btn btn-delete" onclick="deleteReviewItem('${review.id}')">Delete</button></td>
-            </tr>
-          `).join('');
+        if (approvedTbody) {
+          if (approved.length === 0) {
+            approvedTbody.innerHTML = '<tr><td colspan="6" style="text-align:center">No approved reviews yet</td></tr>';
+          } else {
+            approvedTbody.innerHTML = approved.map(review => {
+              let dateDisplay = 'N/A';
+              if (review.createdAt && review.createdAt.toDate) {
+                dateDisplay = review.createdAt.toDate().toLocaleDateString();
+              }
+              return `
+                <tr>
+                  <td>${dateDisplay}</td>
+                  <td>${escapeHtml(review.name || 'Anonymous')}</td>
+                  <td>${escapeHtml(review.service || '')}</td>
+                  <td><span class="stars">${'★'.repeat(review.stars)}${'☆'.repeat(5 - review.stars)}</span></td>
+                  <td class="review-text-preview">${escapeHtml(review.text || review.review || '')}</td>
+                  <td><button class="action-btn btn-delete" onclick="window.deleteReviewItem('${review.id}')">Delete</button></td>
+                </tr>
+              `;
+            }).join('');
+          }
         }
       } catch (error) {
         console.error('Error loading reviews:', error);
       }
     }
     
+    // Global functions for buttons
     window.confirmBooking = async function(id) {
       if (confirm('Confirm this appointment?')) {
         await updateBookingStatus(id, 'confirmed');
@@ -477,6 +527,8 @@
     window.viewReview = function(text, name, stars) {
       const modal = document.getElementById('reviewModal');
       const modalBody = document.getElementById('modalBody');
+      if (!modal || !modalBody) return;
+      
       modalBody.innerHTML = `
         <h3>Review Details</h3>
         <p><strong>Name:</strong> ${name}</p>
@@ -488,9 +540,19 @@
     };
     
     window.closeModal = function() {
-      document.getElementById('reviewModal').style.display = 'none';
+      const modal = document.getElementById('reviewModal');
+      if (modal) modal.style.display = 'none';
     };
     
+    // Close modal on click outside
+    document.addEventListener('click', function(e) {
+      const modal = document.getElementById('reviewModal');
+      if (modal && e.target === modal) {
+        modal.style.display = 'none';
+      }
+    });
+    
+    // Escape HTML helper
     function escapeHtml(str) {
       if (!str) return '';
       return str.replace(/[&<>]/g, function(m) {
@@ -500,6 +562,6 @@
         return m;
       });
     }
-  </script>
+</script>
 </body>
 </html>
